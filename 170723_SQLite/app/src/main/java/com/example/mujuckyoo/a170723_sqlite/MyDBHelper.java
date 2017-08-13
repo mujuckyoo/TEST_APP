@@ -14,6 +14,8 @@ import android.widget.CheckBox;
 public class MyDBHelper extends SQLiteOpenHelper {
 
 
+    MainActivity ma;
+
     public MyDBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
@@ -22,7 +24,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
 
-        db.execSQL("create table if not exists MONEYBOOK ( mb_id int AUTO_INCREMENT, date varchar(15), " +
+        db.execSQL("create table if not exists MONEYBOOK ( mb_id int AUTO_INCREMENT, user_id varchar(15), date varchar(15), " +
                 "item varchar(255), price int, PRIMARY KEY(mb_id)); ");
 
     }
@@ -36,11 +38,13 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getReadableDatabase();
 
+
         String query = "select * from MONEYBOOK order by date desc;";
 
-        if(!MainActivity.cb_desc.isChecked()) {
 
-            query = "select * from MONEYBOOK;";
+        if(!ma.cb_desc.isChecked()) {
+
+            query = "select * from MONEYBOOK order by date asc;";
 
         }
         //data를 0,0부터 가지고 온다

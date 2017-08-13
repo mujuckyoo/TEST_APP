@@ -7,16 +7,6 @@
     tools:context="com.example.mujuckyoo.a170723_sqlite.MainActivity">
 
 
-    <DatePicker
-        android:id="@+id/datePicker"
-        android:padding="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:calendarViewShown="true"/>
-
-    <!--android:datePickerMode="spinner"-->
-
     <LinearLayout
         android:id="@+id/ll_all"
         android:layout_width="match_parent"
