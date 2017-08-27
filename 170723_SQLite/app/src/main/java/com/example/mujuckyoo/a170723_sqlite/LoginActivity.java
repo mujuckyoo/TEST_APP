@@ -15,6 +15,8 @@ public class LoginActivity extends AppCompatActivity {
     Button btn_login, btn_signUp;
 
     LoginDBHelper loginDBHelper;
+    public static String user_id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +44,12 @@ public class LoginActivity extends AppCompatActivity {
 
         } else {
 
+            user_id = et_ID.getText().toString();
+
             Intent i = new Intent(this, MainActivity.class);
 
             startActivity(i);
+
 
         }
     }

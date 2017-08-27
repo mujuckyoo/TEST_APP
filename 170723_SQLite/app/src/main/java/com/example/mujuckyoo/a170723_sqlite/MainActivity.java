@@ -10,10 +10,13 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,8 +33,14 @@ public class MainActivity extends AppCompatActivity {
     TextView txt_list;
     LinearLayout ll_all, ll_voucher;
     ScrollView sv_show;
-    CheckBox cb_desc;
+    ListView listView;
+    Button btn;
+    MyCustomAdapter customAdapter;
+    int count = 0;
+    public static ArrayList<Spent_Item> al;
+    public static CheckBox cb_desc;
 
+    public MainActivity() {}
 
 
     @Override
@@ -47,14 +56,26 @@ public class MainActivity extends AppCompatActivity {
         btn_del = (Button) findViewById(R.id.btn_del);
         btn_mod = (Button) findViewById(R.id.btn_mod);
         btn_list = (Button) findViewById(R.id.btn_list);
-        btn_date = (Button) findViewById(R.id.btn_date);
         et_date = (EditText) findViewById(R.id.et_date);
         txt_list = (TextView)findViewById(R.id.txt_list);
         txt_list.setText("");
         cb_desc = (CheckBox) findViewById(R.id.checkBox);
         ll_all = (LinearLayout)findViewById(R.id.ll_all);
-        sv_show = (ScrollView)findViewById(R.id.sv_show);
         ll_voucher = (LinearLayout) View.inflate(MainActivity.this, R.layout.activity_voucher, null);
+
+
+        al = new ArrayList<Spent_Item>();
+        listView = (ListView)findViewById(R.id.listView);
+
+        customAdapter = new MyCustomAdapter(this,al);
+        listView.setAdapter(customAdapter);
+
+        Date today = new Date();
+        SimpleDateFormat KST = new SimpleDateFormat("yyyy-MM-dd a HH:mm:ss");
+
+        al.add(new Spent_Item(KST.format(today), "Title", "송혜교"));
+
+        customAdapter.getView(0, null, listView);
 
 
 
@@ -80,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
         et_date.setText(String.valueOf(data.getExtras().getString("DATE")));
     }
 
+
+
     public void btn_clicked(View v) {
 
                 if (et_date.getText().length() != 0 && et_item.getText().length() != 0 && et_price.getText().length() != 0) {
@@ -93,27 +116,27 @@ public class MainActivity extends AppCompatActivity {
 
                             dbHelper.insert_item(date, item, price);
 
-                            sv_show.addView(ll_voucher);
-
-                            txt_list.setText(dbHelper.read_all());
                             et_date.setText("");
                             et_item.setText("");
                             et_price.setText("");
-
+                            dbHelper.read_all();
+                            customAdapter.getView(0, null, listView);
                             break;
                         case R.id.btn_del:
                             dbHelper.delete_item(item);
-                            txt_list.setText(dbHelper.read_all());
+                            dbHelper.read_all();
 
+                            customAdapter.getView(0, null, listView);
                             break;
                         case R.id.btn_mod:
                             dbHelper.update_item(item, price);
-                            txt_list.setText(dbHelper.read_all());
+                            dbHelper.read_all();
 
+                            customAdapter.getView(0, null, listView);
                             break;
                         case R.id.btn_list:
-
-                            txt_list.setText(dbHelper.read_all());
+                            dbHelper.read_all();
+                            customAdapter.getView(0, null, listView);
                             break;
 
                     }
